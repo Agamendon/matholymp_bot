@@ -3,11 +3,12 @@ import telebot
 from bs4 import BeautifulSoup
 import time
 import datetime
+from flask import Flask, request
 
 
 def get_page(url, sess: requests.Session):
-    request = sess.get('https://matholymp.com.ua/')
-    return request.text
+    site_request = sess.get('https://matholymp.com.ua/')
+    return site_request.text
 
 
 def get_headers(text):
