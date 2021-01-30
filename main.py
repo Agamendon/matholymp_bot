@@ -63,16 +63,16 @@ def run():
             page_text = get_page('https://matholymp.com.ua/', session)
             curr_headers = get_headers(page_text)
             if are_headers_same(prev_headers, curr_headers):
-                print(f'Check on {datetime.datetime.now()}, headers are same')
+                print(f'Check on UTC {datetime.datetime.now()}, headers are same')
             else:
-                print('false')
+                print(f'Headers changed on UTC {datetime.datetime.now()}, sending update to group')
                 bot.send_message('@matholymp_notifications', get_link(str(curr_headers[0])))
                 prev_headers = curr_headers
 
         except Exception as e:
             pass
 
-        time.sleep(10)
+        time.sleep(30)
 
 
 @server.route("/" + TOKEN, methods=['POST'])
