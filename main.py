@@ -4,6 +4,13 @@ from bs4 import BeautifulSoup
 import time
 import datetime
 from flask import Flask, request
+import os
+import threading
+
+
+TOKEN = '1649976187:AAFz6_PCCD3cDKSmbUDY6BZ6PtsA_1Cl1_s'
+bot = telebot.TeleBot(TOKEN)
+server = Flask(__name__)
 
 
 def get_page(url, sess: requests.Session):
@@ -32,21 +39,15 @@ def get_link(text):
         return a['href']
 
 
-if __name__ == "__main__":
-
-    TOKEN = '1649976187:AAFz6_PCCD3cDKSmbUDY6BZ6PtsA_1Cl1_s'
+def run():
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36 Edg/88.0.705.56"
     }
-
-    bot = telebot.TeleBot(TOKEN)
 
     session = requests.Session()
     session.headers.update(headers)
 
     prev_headers = []
-
-    # define prev_headers to avoid repeating of material
     try:
         page_text = get_page('https://matholymp.com.ua/', session)
         prev_headers = get_headers(page_text)
@@ -72,3 +73,20 @@ if __name__ == "__main__":
             pass
 
         time.sleep(10)
+
+
+@server.route("/" + TOKEN, methods=['POST'])
+def webhook_():
+    return '!', 200
+
+
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url='https://dry-harbor-03840.herokuapp.com/' + TOKEN)
+    return "!", 200
+
+
+if __name__ == '__main__':
+    threading.Thread(target=run).start()
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
