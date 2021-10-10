@@ -73,6 +73,17 @@ def run():
             pass
 
         time.sleep(30)
+        
+@server.route("/" + TOKEN, methods=['POST'])
+def webhook_():
+    return '!', 200
+
+
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url='https://dry-harbor-03840.herokuapp.com/' + TOKEN)
+    return "!", 200
 
 if __name__ == '__main__':
     threading.Thread(target=run).start()
