@@ -12,6 +12,9 @@ TOKEN = '1649976187:AAFz6_PCCD3cDKSmbUDY6BZ6PtsA_1Cl1_s'
 bot = telebot.TeleBot(TOKEN)
 server = Flask(__name__)
 
+URL = "https://vps-5724ad3b.vps.ovh.net/"
+DEF_PORT = 5000
+
 
 def get_page(url, sess: requests.Session):
     site_request = sess.get('https://matholymp.com.ua/')
@@ -82,9 +85,9 @@ def webhook_():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url='https://dry-harbor-03840.herokuapp.com/' + TOKEN)
+    bot.set_webhook(url=(URL + TOKEN))
     return "!", 200
 
 if __name__ == '__main__':
     threading.Thread(target=run).start()
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', DEF_PORT)))
